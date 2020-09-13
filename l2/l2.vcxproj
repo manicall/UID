@@ -142,8 +142,11 @@
     <ClCompile Include="l2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Categories.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Sports.h" />
+    <ClInclude Include="Summer.h" />
+    <ClInclude Include="Winter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
