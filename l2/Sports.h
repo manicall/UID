@@ -4,11 +4,17 @@
 class Sports {
 
 	Categories categories;
+	Categories categories;
 	std::vector<std::string> names;
 
 public:
 	
-	Sports() { names = { "Летний спорт", "Зимний спорт" }; }
+	Sports() { 
+		
+		names = { "Летний спорт", "Зимний спорт" };
+		categories
+	
+	}
 	
 	void print() {
 		for (std::string name : names)		

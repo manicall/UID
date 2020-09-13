@@ -10,9 +10,5 @@ int main() {
 
 
 
-	Summer sum;
-
-
-
-	
+	system("pause");
 }
