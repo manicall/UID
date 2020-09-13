@@ -1,26 +1,21 @@
 #pragma once
-#include "Categories.h"
+#include <string>
+#include <vector>
 
 class Sports {
 
-	Categories categories;
-	Categories categories;
+protected:
+	std::vector<std::string> categories;
 	std::vector<std::string> names;
+	std::vector<std::string> descriptions;
 
 public:
 	
-	Sports() { 
-		
-		names = { "Летний спорт", "Зимний спорт" };
-		categories
-	
-	}
-	
-	void print() {
-		for (std::string name : names)		
-			std:: cout << name;	
-	};
 
+
+	std::vector<std::string> GetCategories() { return categories; }
 	std::vector<std::string> GetNames() { return names; }
-	Categories GetCategories() { return categories; }
+	std::vector<std::string> GetDescriptions() { return descriptions; }
+
 };
+
