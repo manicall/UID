@@ -13,18 +13,26 @@ void check_colors() {
 }
 /*функция для отладки*/
 
+void HideCursor() {
+	CONSOLE_CURSOR_INFO CCI;
+	CCI.bVisible = false;
+	CCI.dwSize = 1;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CCI);
+}
+
 
 int main() {
 	setlocale(LC_ALL, "ru");
-
+	HideCursor();
 
 	Menu menu;
 
+	menu.DisplayMenu();	
+	while (true)
+	{
+		menu.Control();
+	}
 
-	
-
-	check_colors();
-	//menu.DisplayFirstLevelMenu();
 
 	/*распечатать все значения по ключу*/
 	/*for (auto i : sum.get_category_names())
