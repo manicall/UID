@@ -6,6 +6,8 @@
 #include <ctime>
 #include "Menu.h"
 
+enum { ENTER = 13, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80};
+
 int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
@@ -30,10 +32,10 @@ int main() {
             break;
         }
         case 0: break;
-        case 75: if (IsMenuDisplayed) { gotoxy(x1 -= step, y1); } break;
-        case 77: if (IsMenuDisplayed) { gotoxy(x1 += step, y1); } break;
-        case 72: if (IsMenuDisplayed) { gotoxy(x1, y1 -= step); } break;
-        case 80: if (IsMenuDisplayed) { gotoxy(x1, y1 += step); } break;
+        case LEFT: if (IsMenuDisplayed) { gotoxy(x1 -= step, y1); } break;
+        case RIGHT: if (IsMenuDisplayed) { gotoxy(x1 += step, y1); } break;
+        case UP: if (IsMenuDisplayed) { gotoxy(x1, y1 -= step); } break;
+        case DOWN: if (IsMenuDisplayed) { gotoxy(x1, y1 += step); } break;
         case 100: if (IsMenuDisplayed) { return 0; }
         case 97: if (IsMenuDisplayed) {
             HideMenu(textUnderMenu, x2, y2);
@@ -41,7 +43,7 @@ int main() {
             ChangeColor("background");
             break;
         }
-        case 13: if (IsMenuDisplayed) {
+        case ENTER: if (IsMenuDisplayed) {
             HideMenu(textUnderMenu, x2, y2);
             ChoiseMenu(x1, y1, textUnderMenu);
             break;
