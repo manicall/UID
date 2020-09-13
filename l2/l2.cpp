@@ -34,10 +34,7 @@ int main() {
 	}
 
 
-	/*распечатать все значения по ключу*/
-	/*for (auto i : sum.get_category_names())
-		if (i.first == sum.GetCategories()[0])
-			std::cout << i.second << std::endl;*/
+
 
 
 	system("pause");

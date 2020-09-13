@@ -4,29 +4,31 @@
 #include "Summer.h"
 #include "Winter.h"
 #include "Windows.h"
-
+#include <algorithm>
 
 
 class Menu
 {	
+	enum { BACKSPACE = 8, ENTER = 13, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80 };
 	COORD point = { 0, 0 };
-	enum { BACKSPACE = 8,  ENTER = 13, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80 };
 	int levelOfMenu = 0;
 	int pointOfMenu = 0;
 	std::string kindofsports = " Летние виды спорта | Зимние виды спорта | Выход ";
-	std::vector<std::string> menu;
+	std::vector<std::vector<std::string>> menu;
 	Summer summer;
 	Winter winter;
+
 
 	/*Методы*/
 	void ChangeColor(std::string color);
 	void CreateMenu(int levelOfMenu = 0);
 	void Choise(int& pointOfMenu, int& levelOfMenu) {
+
 		switch (levelOfMenu) {
+
 		case 0:
-			if (!pointOfMenu) {
-				DisplayMenu(1);
-			}
+			DisplayMenu(levelOfMenu, false);
+			DisplayMenu(++levelOfMenu);
 			if (pointOfMenu) {
 
 			}
@@ -34,9 +36,14 @@ class Menu
 				exit(0);
 			}
 			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
 		default: return;
 		}
-		++levelOfMenu;
 	}
 	void LightPointOfMenu(int pointOfMenu, int levelOfMenu) {
 		ChangeColor("reverse_default");
@@ -68,22 +75,25 @@ class Menu
 	}
 public:
 	Menu() {
-		menu.reserve(3);
 		CreateMenu();
 	}
 
     /*Методы*/
 
-	void DisplayMenu(int levelOfMenu = 0) { 
+	void DisplayMenu(int levelOfMenu = 0, bool cursor = true) { 
 		switch (levelOfMenu) {
 		case 0:
 			gotoxy(0, 0);
-			std::cout << menu[levelOfMenu];
-			LightPointOfMenu(pointOfMenu, levelOfMenu);
+			for(int i = 0; i < 3; i++)
+				std::cout << menu[levelOfMenu][i] << std::endl;
+			if (cursor) LightPointOfMenu(pointOfMenu, levelOfMenu);
 			break;
 		case 1: 
-			gotoxy(10, 2);
-			std::cout << menu[0];
+			CreateMenu(levelOfMenu);
+			for (int i = 0; i < menu[levelOfMenu].size(); i++) {
+				gotoxy(10, i + 2);
+				std::cout << menu[1][i];
+			}
 
 			break;
 		case 2:
@@ -125,22 +135,48 @@ public:
 		 if (direction == RIGHT || direction == DOWN)
 			 ++pointOfMenu;
  }
-
+ 
 void Menu::CreateMenu(int levelOfMenu) {
 	switch (levelOfMenu)
 	{
 	case 0: 
-		menu.push_back("+");
+		menu.push_back(std::vector<std::string>(3));
+		menu[levelOfMenu][0].push_back('+');
 		for (size_t i = 0; i < kindofsports.length(); i++)
-			menu[0].push_back('-');
-		menu[0] += "+\n";
-		menu[0] += "|" + kindofsports + "|\n";
-		menu[0].push_back('+');
-		for (size_t i = 0; i < kindofsports.length(); i++)
-			menu[0].push_back('-');
-		menu[0].push_back('+');
+			menu[levelOfMenu][0].push_back('-');
+		menu[levelOfMenu][0].push_back('+');
+		menu[levelOfMenu][1] += "|" + kindofsports + "|";
+		menu[levelOfMenu][2].push_back('+');
+		for (size_t i = levelOfMenu; i < kindofsports.length(); i++)
+			menu[levelOfMenu][2].push_back('-');
+		menu[levelOfMenu][2].push_back('+');
 		break;
 	case 1:
+		/*поместить в функцию*/
+		if (!pointOfMenu) {
+			/*вычисляем размер меню*/
+			std::vector <int> lengths;
+			for (auto i : summer.GetCategories())
+				lengths.push_back(i.length());			
+			int sizeOfMenu = *std::max_element(lengths.begin(), lengths.end());
+			/*создаем второе меню*/
+			menu.push_back(std::vector<std::string>(2 + summer.GetCategories().size()));
+			menu[levelOfMenu][0].push_back('+');
+
+			int i = 1;
+			for (; i < summer.GetCategories().size() + 1; i++) {
+				menu[levelOfMenu][i] += "| " + summer.GetCategories()[i] + " |";
+			}			
+			menu[levelOfMenu][0].push_back('+');
+			for (int j = 0; j < sizeOfMenu; j++) 
+				menu[levelOfMenu][i].push_back('-');
+			menu[levelOfMenu][++i].push_back('+');
+
+		}
+		/*поместить в функцию*/
+	case 2:
+		menu.push_back(std::vector<std::string>(3));
+
 
 		break;
 	default: break;
