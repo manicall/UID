@@ -1,6 +1,5 @@
 #include "Menu.h"
 
-
 /*заполнитель*/
 std::string Padding(std::string str, const size_t num, const char paddingChar = ' ')
 {
@@ -78,25 +77,42 @@ void Menu::LightPointOfMenu(int levelOfMenu) {
 			std::cout << summer.GetCategories()[pointOfMenu];
 		if (choosen[FIRST] == "Зимние виды спорта")
 			std::cout << winter.GetCategories()[pointOfMenu];
-
 		break;
 	case THIRD:
 		gotoxy(15, 3);
 		if (choosen[FIRST] == "Летние виды спорта")
-			for (int i = 0; i < summer.GetCategories().size(); i++)
-				if (choosen[SECOND] == summer.GetCategories()[i]) {
-					gotoxy(SizeOfMenu(summer.GetCategories()) + 15, 3 + i);
-					std::cout << summer.FindAllValues(summer.GetCategories()[i])[pointOfMenu];
-					break;
-				}
-			
-
-
+			LightPointOfThirdMenu(summer);
+		if (choosen[FIRST] == "Зимние виды спорта")
+			LightPointOfThirdMenu(winter);			
 		break;
 	}
 	gotoxy(point);
 	std::cout << text;
 	ChangeColor("default");
+}
+void Menu::LightPointOfThirdMenu(Sports& sport)
+{
+	int size = 0;
+	ChangeColor("reverse_default");
+	for (int i = 0; i < sport.GetCategories().size(); i++)
+		if (choosen[SECOND] == sport.GetCategories()[i]) {	
+			/*предотвратить выход за пределы меню*/		
+			if (pointOfMenu >= sport.FindAllValues(sport.GetCategories()[i]).size())
+				pointOfMenu = sport.FindAllValues(sport.GetCategories()[i]).size() - 1;
+			/*подсветить пункт меню*/
+			if (!pointOfMenu)
+				gotoxy(SizeOfMenu(sport.GetCategories()) + 15, 3 + i);
+			else {
+				/*ОТЛАДКА*/
+				std::vector<std::string> str = sport.FindAllValues(sport.GetCategories()[i]);
+				for (int j = 0; j < pointOfMenu; j++)
+					size += sport.FindAllValues(sport.GetCategories()[i])[j].size();
+				size += 3 * pointOfMenu;
+				gotoxy(SizeOfMenu(sport.GetCategories()) + size + 15, 3 + i);
+			}	
+			std::cout << sport.FindAllValues(sport.GetCategories()[i])[pointOfMenu];
+			break;
+		}
 }
 void Menu::Choise(int& pointOfMenu, int levelOfMenu) {
 	++this->levelOfMenu;
@@ -120,10 +136,13 @@ void Menu::Choise(int& pointOfMenu, int levelOfMenu) {
 			choosen[levelOfMenu] = summer.GetCategories()[pointOfMenu];			
 		if (choosen[FIRST] == "Зимние виды спорта")
 			choosen[levelOfMenu] = winter.GetCategories()[pointOfMenu];
+		pointOfMenu = FIRST;
 		DisplayMenu(levelOfMenu);
 		DisplayMenu(this->levelOfMenu);
+
 		break;
 	case THIRD:
+
 		break;
 	default: 
 		break;
@@ -152,18 +171,13 @@ void Menu::DisplayMenu(int levelOfMenu)
 		break;
 	case THIRD:
 		CreateMenu(levelOfMenu);
-		int sizeOfMenu;
-		if (choosen[FIRST] == "Летние виды спорта")
-			sizeOfMenu = SizeOfMenu(summer.GetCategories());
+		if (choosen[FIRST] == "Летние виды спорта") 
+			DisplayThirdMenu(summer);	
 		if (choosen[FIRST] == "Зимние виды спорта")
-			sizeOfMenu = SizeOfMenu(winter.GetCategories());
-		
-		for (int i = 0; i < 3; i++) {
-			gotoxy(13 + sizeOfMenu, i + pointOfMenu + 2);
-			std::cout << menu[levelOfMenu][i];
-		}
+			DisplayThirdMenu(winter);
 		if (this->levelOfMenu == THIRD)
 			LightPointOfMenu(levelOfMenu);
+
 		break;
 	default: 
 		break;
@@ -181,20 +195,21 @@ void Menu::gotoxy(COORD c)
 
 void Menu::HideMenu()
 {
-
-	switch (levelOfMenu)
+	--levelOfMenu;
+	pointOfMenu = 0;
+	switch (levelOfMenu + 1)
 	{
 	case SECOND:
 		system("cls");
 		break;
 	case THIRD:
-
+		system("cls");
+		DisplayMenu(levelOfMenu - 1);
+		DisplayMenu(levelOfMenu);
 		break;
 	default:
 		break;
 	}
-	--levelOfMenu;
-	pointOfMenu = 0;
 }
 
 int Menu::SizeOfMenu(const std::vector<std::string>& vect, bool isVectical)
@@ -235,16 +250,25 @@ void Menu::ChangeColor(std::string color) {
 
 void Menu::ChangePointOfMenu(int& pointOfMenu, int direction)
 {
-	if (levelOfMenu == THIRD)
-	{
-		if (choosen[THIRD] == )
-	}
-	if (pointOfMenu > 0)
+	if (pointOfMenu > 0) 
 		if (direction == LEFT || direction == UP)
 			--pointOfMenu;
 	if (pointOfMenu < 2)
 		if (direction == RIGHT || direction == DOWN)
 			++pointOfMenu;
+	
+}
+
+void Menu::DisplayThirdMenu(Sports& sport)
+{
+	int sizeOfMenu = SizeOfMenu(sport.GetCategories());
+	int i = 0;	
+	for (;i < sport.GetCategories().size(); i++)
+	if (choosen[SECOND] == sport.GetCategories()[i])
+	for (int j = 0; j < 3; j++) {
+			gotoxy(13 + sizeOfMenu, j + i + 2);
+		std::cout << menu[levelOfMenu][j] << std::endl;	
+	}
 }
 
 void Menu::CreateMenu(int levelOfMenu) {

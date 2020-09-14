@@ -35,10 +35,12 @@ class Menu
 	void CreateThirdLevelMenu(Sports& sport);
 	void Choise(int& pointOfMenu, int levelOfMenu);
 	void LightPointOfMenu(int levelOfMenu);
+	void LightPointOfThirdMenu(Sports& sport);
 	void gotoxy(int x, int y);
 	void gotoxy(COORD c);
 	void ChangePointOfMenu(int& pointOfMenu, int direction);
 	void PrintDescription();
+	void DisplayThirdMenu(Sports& sport);
 	
 public:
 	Menu();
