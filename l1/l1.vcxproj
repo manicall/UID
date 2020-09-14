@@ -139,10 +139,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="l1.cpp" />
+    <ClInclude Include="..\l1(2)\Menu.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\l1(2)\Menu.h" />
+    <ClCompile Include="l1.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

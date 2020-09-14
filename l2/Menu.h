@@ -5,7 +5,15 @@
 #include "Winter.h"
 #include "Windows.h"
 #include <algorithm>
+#include <iostream>
 
+/*заполнитель*/
+std::string Padding(std::string str, const size_t num, const char paddingChar = ' ')
+{
+	if (num > str.size())
+		str.insert(str.length(), num - str.size(), paddingChar);
+	return str;
+}
 
 class Menu
 {	
@@ -22,18 +30,45 @@ class Menu
 	/*ћетоды*/
 	void ChangeColor(std::string color);
 	void CreateMenu(int levelOfMenu = 0);
+	void CreateSecondLevelMenu(Sports& sport) {
+	
+		/*вычисл€ем размер*/
+		std::vector <int> lengths;
+		for (auto i : sport.GetCategories())
+			lengths.push_back(i.length());
+		int sizeOfMenu = *std::max_element(lengths.begin(), lengths.end());
+		/*создаем второе меню*/
+		menu.push_back(std::vector<std::string>(2 + sport.GetCategories().size()));
+		/*верхн€€ граница*/
+		menu[levelOfMenu][0].push_back('+');
+		for (int i = 0; i < sizeOfMenu + 2; i++)
+			menu[levelOfMenu][0].push_back('-');
+		menu[levelOfMenu][0].push_back('+');
+		/*пункты меню*/
+		int i = 0;
+		for (; i < sport.GetCategories().size(); i++) {
+			menu[levelOfMenu][i + 1] += "| " + Padding(sport.GetCategories()[i], sizeOfMenu) + " |";
+		}
+		/*нижн€€ граница*/
+		++i;
+		menu[levelOfMenu][i].push_back('+');
+		for (int j = 0; j < sizeOfMenu + 2; j++)
+			menu[levelOfMenu][i].push_back('-');
+		menu[levelOfMenu][i].push_back('+');
+	
+	
+	}
 	void Choise(int& pointOfMenu, int& levelOfMenu) {
 
 		switch (levelOfMenu) {
 
 		case 0:
-			DisplayMenu(levelOfMenu, false);
-			DisplayMenu(++levelOfMenu);
-			if (pointOfMenu) {
-
-			}
 			if (pointOfMenu == 2) {
 				exit(0);
+			}
+			else {
+				DisplayMenu(levelOfMenu, false);
+				DisplayMenu(++levelOfMenu);
 			}
 			break;
 		case 1:
@@ -152,28 +187,12 @@ void Menu::CreateMenu(int levelOfMenu) {
 		menu[levelOfMenu][2].push_back('+');
 		break;
 	case 1:
-		/*поместить в функцию*/
-		if (!pointOfMenu) {
-			/*вычисл€ем размер меню*/
-			std::vector <int> lengths;
-			for (auto i : summer.GetCategories())
-				lengths.push_back(i.length());			
-			int sizeOfMenu = *std::max_element(lengths.begin(), lengths.end());
-			/*создаем второе меню*/
-			menu.push_back(std::vector<std::string>(2 + summer.GetCategories().size()));
-			menu[levelOfMenu][0].push_back('+');
-
-			int i = 1;
-			for (; i < summer.GetCategories().size() + 1; i++) {
-				menu[levelOfMenu][i] += "| " + summer.GetCategories()[i] + " |";
-			}			
-			menu[levelOfMenu][0].push_back('+');
-			for (int j = 0; j < sizeOfMenu; j++) 
-				menu[levelOfMenu][i].push_back('-');
-			menu[levelOfMenu][++i].push_back('+');
-
-		}
-		/*поместить в функцию*/
+		if (!pointOfMenu) 
+			CreateSecondLevelMenu(summer);		
+		if (pointOfMenu) 
+			CreateSecondLevelMenu(winter);		
+		break;
+		
 	case 2:
 		menu.push_back(std::vector<std::string>(3));
 

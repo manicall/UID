@@ -6,7 +6,7 @@
 #include <ctime>
 #include "Menu.h"
 
-enum { ENTER = 13, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80};
+enum { ENTER = 13, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80 };
 
 int main() {
     SetConsoleCP(1251);

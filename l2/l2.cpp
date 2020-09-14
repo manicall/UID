@@ -1,6 +1,5 @@
-#include <iostream>
 #include "Menu.h"
-
+#include <iostream>
 /*функция для отладки*/
 void check_colors() {
 
