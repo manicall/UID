@@ -17,7 +17,7 @@ class Menu
 	COORD point = { 0, 0 };
 	int levelOfMenu = 0;
 	int pointOfMenu = 0;
-	std::string choosen;
+	std::vector<std::string> choosen = { "", "", "" };
 	std::string kindofsports = " Летние виды спорта | Зимние виды спорта | Выход ";
 	std::vector<std::vector<std::string>> menu;
 	Summer summer;
@@ -25,15 +25,19 @@ class Menu
 
 	/*Методы*/
 	void HideMenu();
+	int SizeOfMenu(const std::vector<std::string>& vect);
+	std::string HorizontBorder(int length);
 	void ChangeColor(std::string color);
 	void CreateMenu(int levelOfMenu = 0);
 	void CreateFirstLevelMenu();
 	void CreateSecondLevelMenu(Sports& sport);
-	void Choise(int& pointOfMenu, int& levelOfMenu);
+	void CreateThirdLevelMenu(Sports& sport);
+	void Choise(int& pointOfMenu, int levelOfMenu);
 	void LightPointOfMenu(int levelOfMenu);
 	void gotoxy(int x, int y);
 	void gotoxy(COORD c);
 	void ChangePointOfMenu(int& pointOfMenu, int direction);
+	void PrintDescription();
 
 public:
 	Menu();

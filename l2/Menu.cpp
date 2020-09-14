@@ -7,40 +7,49 @@ std::string Padding(std::string str, const size_t num, const char paddingChar = 
 		str.insert(str.length(), num - str.size(), paddingChar);
 	return str;
 }
-
 Menu::Menu() {
 	CreateMenu();
 }
 void Menu::CreateSecondLevelMenu(Sports& sport) {
 	/*вычисл€ем размер*/
-	std::vector <int> lengths;
-	for (auto i : sport.GetCategories())
-		lengths.push_back(i.length());
-	int sizeOfMenu = *std::max_element(lengths.begin(), lengths.end());
+	int sizeOfMenu = SizeOfMenu(sport.GetCategories());
 	/*создаем второе меню*/
 	if (menu.size() == 1)
-		menu.push_back(std::vector<std::string>(2 + sport.GetCategories().size()));
+		menu.push_back(std::vector<std::string>(2 + sport.GetCategories().size())); // вертикальное меню
 	else
-		for (int i = 0; i < menu[levelOfMenu].size(); i++)
-			menu[levelOfMenu][i].erase();
-
+		for (int i = 0; i < menu[SECOND].size(); i++)
+			menu[SECOND][i].erase();
 	/*верхн€€ граница*/
-	menu[levelOfMenu][0].push_back('+');
-	for (int i = 0; i < sizeOfMenu + 2; i++)
-		menu[levelOfMenu][0].push_back('-');
-	menu[levelOfMenu][0].push_back('+');
+	menu[SECOND][0] = HorizontBorder(sizeOfMenu + 2);
 	/*пункты меню*/
 	int i = 0;
 	for (; i < sport.GetCategories().size(); i++) {
-		menu[levelOfMenu][i + 1] += "| " + Padding(sport.GetCategories()[i], sizeOfMenu) + " |";
+		menu[SECOND][i + 1] += "| " + Padding(sport.GetCategories()[i], sizeOfMenu) + " |";
 	}
 	/*нижн€€ граница*/
 	++i;
-	menu[levelOfMenu][i].push_back('+');
-	for (int j = 0; j < sizeOfMenu + 2; j++)
-		menu[levelOfMenu][i].push_back('-');
-	menu[levelOfMenu][i].push_back('+');
+	menu[SECOND][i] = HorizontBorder(sizeOfMenu + 2);
 
+}
+void Menu::CreateThirdLevelMenu(Sports& sport)
+{
+	/*вычисл€ем размер*/
+	int sizeOfMenu = SizeOfMenu(sport.GetNames());
+	/*создаем третье меню*/
+	if (menu.size() == 2)
+		menu.push_back(std::vector<std::string>(3)); // горизонтальное меню
+	else
+		for (int i = 0; i < menu[SECOND].size(); i++)
+			menu[THIRD][i].erase();
+	/*верхн€€ граница*/
+	menu[THIRD][0] = HorizontBorder(sizeOfMenu + 2);
+	/*пункты меню*/	
+	menu[THIRD][1] = "| ";
+	for (int i = 0; i < sport.GetCategories().size(); i++) {
+		menu[THIRD][1] += sport.GetCategories()[i], sizeOfMenu + " |";
+	}
+	/*нижн€€ граница*/
+	menu[THIRD][2] = HorizontBorder(sizeOfMenu + 2);
 }
 void Menu::LightPointOfMenu(int levelOfMenu) {
 	ChangeColor("reverse_default");
@@ -62,9 +71,9 @@ void Menu::LightPointOfMenu(int levelOfMenu) {
 		break;
 	case SECOND:
 		gotoxy(12, pointOfMenu + 3);
-		if (choosen == "Ћетние виды спорта")
+		if (choosen[FIRST] == "Ћетние виды спорта")
 			std::cout << summer.GetCategories()[pointOfMenu];
-		if (choosen == "«имние виды спорта")
+		if (choosen[FIRST] == "«имние виды спорта")
 			std::cout << winter.GetCategories()[pointOfMenu];
 
 		break;
@@ -75,31 +84,32 @@ void Menu::LightPointOfMenu(int levelOfMenu) {
 	std::cout << text;
 	ChangeColor("default");
 }
-
-void Menu::Choise(int& pointOfMenu, int& levelOfMenu) {
-
+void Menu::Choise(int& pointOfMenu, int levelOfMenu) {
+	++this->levelOfMenu;
 	switch (levelOfMenu) {
 	case FIRST:
-		++levelOfMenu;
 		if (pointOfMenu == THIRD) {
 			exit(0);
 		}
-		else {
+		else { 
 			if (pointOfMenu == FIRST)
-				choosen = "Ћетние виды спорта";
+				choosen[levelOfMenu] = "Ћетние виды спорта";
 			if (pointOfMenu == SECOND)
-				choosen = "«имние виды спорта";
+				choosen[levelOfMenu] = "«имние виды спорта";
 			pointOfMenu = FIRST;
-			DisplayMenu(0);
 			DisplayMenu(levelOfMenu);
+			DisplayMenu(this->levelOfMenu);
 		}
 		break;
 	case SECOND:
-
+		if (choosen[FIRST] == "Ћетние виды спорта")
+			choosen[levelOfMenu] = summer.GetCategories()[pointOfMenu];			
+		if (choosen[FIRST] == "«имние виды спорта")
+			choosen[levelOfMenu] = winter.GetCategories()[pointOfMenu];
+		DisplayMenu(levelOfMenu);
+		DisplayMenu(this->levelOfMenu);
 		break;
 	case THIRD:
-		break;
-	case 3:
 		break;
 	default: 
 		break;
@@ -161,6 +171,25 @@ void Menu::HideMenu()
 	pointOfMenu = 0;
 }
 
+int Menu::SizeOfMenu(const std::vector<std::string>& vect)
+{
+	std::vector <int> lengths;
+	for (auto i :vect)
+		lengths.push_back(i.length());
+	return *std::max_element(lengths.begin(), lengths.end());
+	
+}
+
+std::string Menu::HorizontBorder(int length)
+{
+	std::string str;
+	str.push_back('+');
+	for (int i = 0; i < length; i++)
+		str.push_back('-');
+	str.push_back('+');
+	return str;
+}
+
 void Menu::ChangeColor(std::string color) {
 	{
 		if (color == "default")
@@ -187,14 +216,15 @@ void Menu::CreateMenu(int levelOfMenu) {
 		CreateFirstLevelMenu();
 		break;
 	case SECOND:
-		if (choosen == "Ћетние виды спорта")
+		if (choosen[FIRST] == "Ћетние виды спорта")
 			CreateSecondLevelMenu(summer);
-		if (choosen == "«имние виды спорта")
+		if (choosen[FIRST] == "«имние виды спорта")
 			CreateSecondLevelMenu(winter);
 		break;
 	case THIRD:
-		menu.push_back(std::vector<std::string>(3));
+		//menu.push_back(std::vector<std::string>(3));
 
+		
 
 		break;
 	default: break;
@@ -203,16 +233,10 @@ void Menu::CreateMenu(int levelOfMenu) {
 
 void Menu::CreateFirstLevelMenu()
 {
-	menu.push_back(std::vector<std::string>(3));
-	menu[levelOfMenu][0].push_back('+');
-	for (size_t i = 0; i < kindofsports.length(); i++)
-		menu[levelOfMenu][0].push_back('-');
-	menu[levelOfMenu][0].push_back('+');
-	menu[levelOfMenu][1] += "|" + kindofsports + "|";
-	menu[levelOfMenu][2].push_back('+');
-	for (size_t i = levelOfMenu; i < kindofsports.length(); i++)
-		menu[levelOfMenu][2].push_back('-');
-	menu[levelOfMenu][2].push_back('+');
+	menu.push_back(std::vector<std::string>(3)); // горизонтальное меню
+	menu[levelOfMenu][0] = HorizontBorder(kindofsports.length());
+	menu[levelOfMenu][1] = "|" + kindofsports + "|";
+	menu[levelOfMenu][2] = HorizontBorder(kindofsports.length());
 }
 
 void Menu::Control() {
