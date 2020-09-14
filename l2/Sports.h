@@ -17,12 +17,14 @@ public:
 	std::vector<std::string> GetNames() { return names; }
 	std::vector<std::string> GetDescriptions() { return descriptions; }
 	std::multimap<std::string, std::string> get_category_names() { return category_names; }
-	/*распечатать все значения по ключу*/
+	/*найти все значения по ключу*/
 	std::vector<std::string> FindAllValues(std::string key) {
 		std::vector<std::string> values;
-		for (auto i : category_names)
+		for (auto i : category_names) {
 			if (i.first == key)
 				values.push_back(i.second);
+		}
+		return values;
 	}
 };
 

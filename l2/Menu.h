@@ -6,6 +6,7 @@
 #include "Windows.h"
 #include <algorithm>
 #include <iostream> 
+#include <numeric>
 
 class Menu
 {	
@@ -25,7 +26,7 @@ class Menu
 
 	/*Ìועמהû*/
 	void HideMenu();
-	int SizeOfMenu(const std::vector<std::string>& vect);
+	int SizeOfMenu(const std::vector<std::string>& vect, bool isVertical = true);
 	std::string HorizontBorder(int length);
 	void ChangeColor(std::string color);
 	void CreateMenu(int levelOfMenu = 0);
@@ -38,7 +39,7 @@ class Menu
 	void gotoxy(COORD c);
 	void ChangePointOfMenu(int& pointOfMenu, int direction);
 	void PrintDescription();
-
+	
 public:
 	Menu();
 
