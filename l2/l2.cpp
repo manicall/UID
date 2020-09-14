@@ -26,7 +26,7 @@ int main() {
 
 	Menu menu;
 
-	menu.DisplayMenu();	
+	menu.DisplayMenu(0);	
 	while (true)
 	{
 		menu.Control();
