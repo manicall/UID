@@ -1,5 +1,5 @@
 #include "Menu.h"
-
+//#define DEBUG
 /*заполнитель*/
 std::string Padding(std::string str, const size_t num, const char paddingChar = ' ')
 {
@@ -103,14 +103,13 @@ void Menu::LightPointOfThirdMenu(Sports& sport)
 			if (!pointOfMenu)
 				gotoxy(SizeOfMenu(sport.GetCategories()) + 15, 3 + i);
 			else {
-				/*ОТЛАДКА*/
-				std::vector<std::string> str = sport.FindAllValues(sport.GetCategories()[i]);
 				for (int j = 0; j < pointOfMenu; j++)
 					size += sport.FindAllValues(sport.GetCategories()[i])[j].size();
 				size += 3 * pointOfMenu;
 				gotoxy(SizeOfMenu(sport.GetCategories()) + size + 15, 3 + i);
 			}	
-			std::cout << sport.FindAllValues(sport.GetCategories()[i])[pointOfMenu];
+			choosen[THIRD] = sport.FindAllValues(sport.GetCategories()[i])[pointOfMenu];
+			std::cout << choosen[THIRD];
 			break;
 		}
 }
@@ -141,7 +140,12 @@ void Menu::Choise(int& pointOfMenu, int levelOfMenu) {
 		DisplayMenu(this->levelOfMenu);
 
 		break;
-	case THIRD:
+	case THIRD:	
+		--this->levelOfMenu;
+		if (choosen[FIRST] == "Летние виды спорта")
+			PrintDescription(summer);
+		if (choosen[FIRST] == "Зимние виды спорта")
+			PrintDescription(winter);
 
 		break;
 	default: 
@@ -241,10 +245,18 @@ std::string Menu::HorizontBorder(int length)
 
 void Menu::ChangeColor(std::string color) {
 	{
+#ifdef DEBUG
 		if (color == "default")
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((0 << 4) | 7));
 		if (color == "reverse_default")
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((15 << 4) | 0));
+#else
+		if (color == "default")
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((7 << 4) | 0));
+		if (color == "reverse_default")
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((0 << 4) | 7));
+#endif // !DEBUG
+
 	};
 }
 
@@ -257,6 +269,15 @@ void Menu::ChangePointOfMenu(int& pointOfMenu, int direction)
 		if (direction == RIGHT || direction == DOWN)
 			++pointOfMenu;
 	
+}
+
+void Menu::PrintDescription(Sports& sport)
+{
+	gotoxy(0, 10);
+	for(int i = 0; i < sport.GetNames().size(); i++)
+		if (choosen[THIRD] == sport.GetNames()[i]) {
+		std::cout << sport.GetDescriptions()[i];
+	}
 }
 
 void Menu::DisplayThirdMenu(Sports& sport)

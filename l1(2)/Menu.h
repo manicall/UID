@@ -1,7 +1,14 @@
 #pragma once
+#include <iostream>
+#include <conio.h>
+#include <Windows.h>
+#include <io.h>
+#include <fcntl.h>
+#include <ctime>
+#include <Windows.h>
 #include <string>
 bool IsMenuDisplayed = false; // отображается ли меню
-bool echoMode = true;
+bool echoMode = false;
 /*переместить курсор по координатам*/
 void gotoxy(int x, int y)
 {

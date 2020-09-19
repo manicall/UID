@@ -39,7 +39,7 @@ class Menu
 	void gotoxy(int x, int y);
 	void gotoxy(COORD c);
 	void ChangePointOfMenu(int& pointOfMenu, int direction);
-	void PrintDescription();
+	void PrintDescription(Sports& sport);
 	void DisplayThirdMenu(Sports& sport);
 	
 public:
