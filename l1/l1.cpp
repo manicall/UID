@@ -13,7 +13,6 @@ int main() {
     SetConsoleOutputCP(1251);
     srand(time(NULL));
     ChangeColor("default");
-
     std::cout << "вывод меню на клавишу F2";
     std::wstring menu;
     createmenu(menu);
@@ -22,6 +21,7 @@ int main() {
     int x2 = 0, y2 = 0;
     int step = 1;
     char c;
+    SwitchEchoMode(false); // запрет на эхо мод в начале программы
     while (true) {
         c = _getch();
         switch (c) {
@@ -37,46 +37,48 @@ int main() {
         case UP: if (IsMenuDisplayed) { gotoxy(x1, y1 -= step); } break;
         case DOWN: if (IsMenuDisplayed) { gotoxy(x1, y1 += step); } break;
         case ENTER: if (IsMenuDisplayed) {
-            HideMenu(textUnderMenu, x2, y2);
             ChoiseMenu(x1, y1, textUnderMenu);
+            HideMenu(textUnderMenu, x2, y2);
             break;
         }
-
         }
-       if(!IsMenuDisplayed && echoMode) {
+        if (c == 0 || c == 60) continue;
+        if(!IsMenuDisplayed && echoMode) {
             if ((c == LEFT || c == RIGHT || c == UP || c == DOWN)) {
                 gotoxy(--x2, y2);
                 std::cout << " ";
                 gotoxy(x2, y2);
                 continue;
             }
-            else
-                std::cout << c;
+            else std::cout << c;
             GetConsoleCursorPosition(x2, y2);
-
-        }
-        if (x2 >= 0 && x2 <= 35 && y2 >= 0 && y2 <= 2) {
-            textUnderMenu[y2] += c;
+            if (x2 >= 0 && x2 <= 35 && y2 >= 0 && y2 <= 2) {
+                textUnderMenu[y2] += c;
+            }
         }
         if (IsMenuDisplayed) {
-            if (c == 100 || c == -30)  { return 0; }
+            if (c == 100 || c == -30)  {
+                MessageBeep(0);
+                return 0;
+            }
             if (c == 97 || c == -12)  {
+                ChangeColor("background");
                 HideMenu(textUnderMenu, x2, y2);
                 SwitchEchoMode(false);
-                ChangeColor("background");
             }
             if (c == 39 || c == -3) {
+                MessageBeep(0);
                 HideMenu(textUnderMenu, x2, y2);
                 SwitchEchoMode(true);
             }
             if (c == 119 || c == -10)
             {
+                ChangeColor("font");
                 HideMenu(textUnderMenu, x2, y2);
                 SwitchEchoMode(false);
-                ChangeColor("font");
             }
-            CheckBorders(x1, y1);
         }
+        CheckBorders(x1, y1);
     }
     system("pause");
     return 0;

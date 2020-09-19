@@ -106,26 +106,8 @@ void ChangeColor(const char* attrubute)
     else color += std::to_string(font);
 
     system(color.data());
+    if (IsMenuDisplayed) MessageBeep(0);
 }
-/*{
-    int static font = 0, background = 7;
-    int _font = font; // последний цвет шрифта 
-    int _background = background; // последний цвет фона
-    do {
-        if (!strcmp(attrubute, "font"))
-            while (_font == font || font == background)
-                font = rand() % 16;
-        else if (!strcmp(attrubute, "background"))
-            while (_background == background || font == background)
-                background = rand() % 16;
-    } while (font == background);
-    if (!strcmp(attrubute, "default"))
-    {
-        font = 0, background = 7;
-    }
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((background << 4) | font));
-}
-*/
 /*закрасить меню*/
 void HideMenu(std::string textUnderMenu[]) {
 
@@ -172,8 +154,12 @@ void ChoiseMenu(int x, int y, std::string textUnderMenu[]) {
         else if (x >= 21 && x <= 25) 
         {
             SwitchEchoMode(true);
+            MessageBeep(0);
         }
-        else if (x >= 27 && x <= 33) exit(0);
+        else if (x >= 27 && x <= 33) {
+            MessageBeep(0);
+            exit(0);
+        }
     }
 }
 /*недает курсору выйти за границы*/

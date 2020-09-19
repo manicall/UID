@@ -153,7 +153,6 @@ void Menu::Choise(int& pointOfMenu, int levelOfMenu) {
 	}
 
 }
-
 void Menu::DisplayMenu(int levelOfMenu)
 {
 	switch (levelOfMenu) {
@@ -262,12 +261,33 @@ void Menu::ChangeColor(std::string color) {
 
 void Menu::ChangePointOfMenu(int& pointOfMenu, int direction)
 {
-	if (pointOfMenu > 0) 
-		if (direction == LEFT || direction == UP)
-			--pointOfMenu;
-	if (pointOfMenu < 2)
-		if (direction == RIGHT || direction == DOWN)
-			++pointOfMenu;
+	if (levelOfMenu % 2 == 0) {
+		if (pointOfMenu > 0) 
+			if (direction == LEFT)
+				--pointOfMenu;
+		if(pointOfMenu < 2)
+			if (direction == RIGHT)
+				++pointOfMenu;
+
+		if (direction == DOWN) 
+			Choise(pointOfMenu, levelOfMenu);
+		if (direction == UP) 
+			HideMenu();
+	}
+	if (levelOfMenu % 2 == 1) {
+		if (pointOfMenu > 0)
+			if (direction == UP)
+				--pointOfMenu;
+		if (pointOfMenu < 2)
+			if (direction == DOWN)
+				++pointOfMenu;
+
+		if (direction == RIGHT)
+			Choise(pointOfMenu, levelOfMenu);
+		if (direction == LEFT)
+			HideMenu();
+	}
+			
 	
 }
 
