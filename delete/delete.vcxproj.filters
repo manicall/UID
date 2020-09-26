@@ -15,13 +15,35 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="l1.cpp">
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="delete.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="delete.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Menu.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
+    <ResourceCompile Include="delete.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
+    <Image Include="delete.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>

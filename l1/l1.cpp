@@ -7,7 +7,12 @@
 #include "Menu.h"
 
 enum { ENTER = 13, LEFT = 75, RIGHT = 77, UP = 72, DOWN = 80 };
-
+int getRandomNumber(int min, int max)
+{
+    static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
+    // Равномерно распределяем рандомное число в нашем диапазоне
+    return static_cast<int>(rand() * fraction * (max - min + 1) + min);
+}
 int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
@@ -58,7 +63,7 @@ int main() {
         }
         if (IsMenuDisplayed) {
             if (c == 100 || c == -30)  {
-                MessageBeep(0);
+                Beep(1000, 300);
                 return 0;
             }
             if (c == 97 || c == -12)  {
@@ -66,8 +71,8 @@ int main() {
                 HideMenu(textUnderMenu, x2, y2);
                 SwitchEchoMode(false);
             }
-            if (c == 39 || c == -3) {
-                MessageBeep(0);
+            if (c == 39 || c == -3) {        
+                Beep(1000, 300);
                 HideMenu(textUnderMenu, x2, y2);
                 SwitchEchoMode(true);
             }
