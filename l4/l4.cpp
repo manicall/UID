@@ -140,7 +140,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wmId)
             {
             case IDD_L4_DIALOG:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, dialog);
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG), hWnd, dialog);
                 break;
             case ID_LIST_INSERT:
                 st.push(std::to_string(rand()%10)[0]);
@@ -175,7 +175,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return 0;
 }
-
 
 HWND hList, hEdit;
 
@@ -216,7 +215,6 @@ INT_PTR CALLBACK dialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             SendMessage(hEdit, WM_GETTEXT, 2, (LPARAM)buf.c_str());
             st.push(buf[0]);
             PrintStackInListBox(hList, st);
-            //buf.clear();
             break;
         case IDCLOSE:
             EndDialog(hDlg, LOWORD(wParam));
