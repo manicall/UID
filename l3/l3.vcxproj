@@ -147,7 +147,6 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Winter.h" />
     <ClInclude Include="графика.h" />
-    <ClInclude Include="диалоговые окна.h" />
     <ClInclude Include="элементы управления.h" />
   </ItemGroup>
   <ItemGroup>

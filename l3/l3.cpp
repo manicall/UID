@@ -154,41 +154,21 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 bool OpenFile(OPENFILENAME& ofn) {
-
     static wchar_t szFilter[] = L"JPEG Image (*.JPG)\0*.jpg\0"
        L"All Files (*.*)\0*.*\0\0";
-
     static wchar_t szFileName[_MAX_PATH];
     static wchar_t szTitleName[_MAX_FNAME + _MAX_EXT];
     //структура для сообщения о выделении строки в текстовом поле
-
     ofn.lStructSize = sizeof(OPENFILENAME);	//размер структуры
-    ofn.hwndOwner = NULL;	//дискриптор окна владельца
-    ofn.hInstance = NULL;	//хендел потока родителя
     ofn.lpstrFilter = szFilter;	//строка допустимых фильтров выбора файлов
-    ofn.lpstrCustomFilter = NULL;	//строка с выбранным фильтром
-    ofn.nMaxCustFilter = 0;	//длина строки предыдущего поля
-    ofn.nFilterIndex = 0;	//индекс выбранной строки фильтра
-    ofn.lpstrFile = NULL;	//строка с выбранным файлом и путем к нему
     ofn.nMaxFile = _MAX_PATH;	//максимально допустимая длина предыдущей строки
-    ofn.lpstrFileTitle = NULL;	//строка с именем выбранного файла
     ofn.nMaxFileTitle = _MAX_FNAME + _MAX_EXT;  //макс.допустимая  длина пред. строки
-    ofn.lpstrInitialDir = NULL;	//имя каталога
-    ofn.lpstrTitle = NULL;	//строка с заголовком диалогового окна
-    ofn.Flags = 0;	//Флаги диалогового окна
-    ofn.nFileOffset = 0;	//Смещение имени файла в строке
-    ofn.nFileExtension = 0;	//Смещение расширения файла в строке
     ofn.lpstrDefExt = L"jpg";	//расширение выбираемых файлов по-умолчанию
-    ofn.lCustData = 0L;	//данные для обработки
-    ofn.lpfnHook = NULL;	//указатель для функции обработки (ФОВ)
-    ofn.lpTemplateName = NULL;	//имя шаблона диалогового окна
-
    //указываем положение буферов для получения результатов
     ofn.lpstrFile = szFileName;
     ofn.lpstrFileTitle = szTitleName;
     //отображать все файлы
     ofn.Flags = OFN_HIDEREADONLY | OFN_CREATEPROMPT;
-
     return GetOpenFileName(&ofn);
 }
 //Процедура обработки сообщений диалогового окна
@@ -247,7 +227,7 @@ BOOL CALLBACK   PviewDlgProc2(HWND    hDlg,
     WPARAM  wParam,
     LPARAM  lParam)
 {
-    static int lx = 146, ly = 163;
+    static int lx = 150, ly = 170;
     static RECT rect; // координаты прямоугольника
     static HDC hdc, hdcm; // контекст устройтва
     static PAINTSTRUCT ps; // структура для перерисовки окна
@@ -266,7 +246,7 @@ BOOL CALLBACK   PviewDlgProc2(HWND    hDlg,
     {
         static PAINTSTRUCT ps; // структура для перерисовки окна
         HDC hdc = BeginPaint(GetDlgItem(hDlg, IDC_STATIC1), &ps); // получить контекст устройства
-        DrawImage(hdc, ofn.lpstrFile,7, 7, lx+50, ly+50);
+        DrawImage(hdc, ofn.lpstrFile,7, 7, lx+60, ly+75);
         EndPaint(GetDlgItem(hDlg, IDC_STATIC1), &ps);
         break;
     }
