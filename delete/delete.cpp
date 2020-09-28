@@ -1,13 +1,8 @@
-﻿// l4.cpp : Определяет точку входа для приложения.
+﻿// delete.cpp : Определяет точку входа для приложения.
 //
-#pragma warning (disable : 4996)
-#undef UNICODE
-#include "framework.h"
-#include <windowsx.h>
-#include "l4.h"
-#include <stack>
-#include <string>
 
+#include "framework.h"
+#include "delete.h"
 
 #define MAX_LOADSTRING 100
 
@@ -21,7 +16,7 @@ ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-HWND hWnd;
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -34,7 +29,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // Инициализация глобальных строк
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_L4, szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_DELETE, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // Выполнить инициализацию приложения:
@@ -43,7 +38,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_L4));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_DELETE));
 
     MSG msg;
 
@@ -59,6 +54,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     return (int) msg.wParam;
 }
+
+
 
 //
 //  ФУНКЦИЯ: MyRegisterClass()
@@ -76,10 +73,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_L4));
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_DELETE));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_L4);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_DELETE);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -100,7 +97,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Сохранить маркер экземпляра в глобальной переменной
 
-   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -134,7 +131,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // Разобрать выбор в меню:
             switch (wmId)
             {
-            case IDD_L4_DIALOG:
+            case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
             case IDM_EXIT:
@@ -162,40 +159,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-std::stack<char> st;
-std::string buf;
-HWND hList;
-int listIndex;
+// Обработчик сообщений для окна "О программе".
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);
     switch (message)
     {
-
     case WM_INITDIALOG:
-        //for (int i = 0; i < st.size(); i++)
-        hList = GetDlgItem(hDlg, IDC_EDIT1);
-
-
         return (INT_PTR)TRUE;
+
     case WM_COMMAND:
-        switch (LOWORD(wParam))
+        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
         {
-        case IDC_LIST1:
-            if (HIWORD(wParam) == LBN_DBLCLK)
-            {
-                if (!(listIndex = ListBox_GetCurSel(hList))) {
-                    st.pop();
-                }
-            }
-            break;
-        case IDOK:
-            SendMessage(hList, WM_GETTEXT, 2, (LPARAM)buf.c_str());
-            st.push(buf[0]);
-            ListBox_AddString(hList, buf.data());
-            buf.clear();
-            break;
-        case IDCLOSE:
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
         }
