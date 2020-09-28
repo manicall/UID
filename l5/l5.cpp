@@ -1,8 +1,43 @@
 ﻿#undef UNICODE
 #include <windows.h>
-#include <string>
 #include "resource.h"
-
+#include <string>
+#include <vector>
+std::string VectorIntInString(std::vector<int> vect) {
+	std::string str;
+	for (auto i : vect)
+		str += char(i + '0');
+	return str;
+}
+std::vector<int> StringToVectorInt(std::string str) {
+	std::vector<int> vect;
+	for (auto i : str)
+		vect.emplace_back(int(i - '0'));
+	return vect;
+}
+std::string sum(std::vector<int> a, std::vector<int> b) {
+	std::string result;
+	int length = max(a.size(), b.size());
+	while (a.size() < length) a.emplace(a.begin(), 0);
+	while (b.size() < length) b.emplace(b.begin(), 0);
+	for (int i = length - 1; i >= 0; i--)
+	{
+		if (b[i] + a[i] > 9) {
+			b[i] += a[i];// суммируем последние разряды чисел
+			if (i - 1 < 0) {
+				b.emplace(b.begin(), b[i] / 10);
+				b[i + 1] %= 10;
+			}
+			else
+				b[i - 1] += (b[i] / 10); // если есть разряд для переноса, переносим его в следующий разряд
+			b[i] %= 10; // если есть разряд для переноса он отсекается
+		}
+		else
+			b[i] += a[i];
+	}
+	result = VectorIntInString(b);
+	return result;
+}
 static int lx = 150, ly = 200; // координаты конца экрана	
 HWND hWndDialog, hWndPanel;
 HINSTANCE       ghInstance;   // Переменная для хранения хендела процесса                      
@@ -51,8 +86,10 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 	static PAINTSTRUCT ps; // структура для перерисовки окна
 	static HBITMAP hbm; // дескриптор изображения
 	static HBRUSH hbr; // дескриптор кисти
-	int first, second;
+	std::vector<int> first, second;
 	std::string str;
+	std::string strSum;
+	char* buf = new char[200];
 	
 	switch (wMsg)
 	{
@@ -80,8 +117,6 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 		InvalidateRect(hWndPanel,
 			NULL, // перерисовать все окно
 			false); // если true перерисовать фон окна
-
-
 		break;
 	case WM_CLOSE:
 		PostQuitMessage(0);
@@ -100,11 +135,14 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 		switch (LOWORD(wParam))
 		{
 		case IDC_BUTTON1:
-			SendMessage(GetDlgItem(hWndDialog, IDC_EDIT1), WM_GETTEXT, 20, (LPARAM)str.data());
-			first = atoi(str.data());
-			SendMessage(GetDlgItem(hWndDialog, IDC_EDIT2), WM_GETTEXT, 20, (LPARAM)str.data());
-			second = atoi(str.data());
-			TextOut(hdcm, x, y, std::to_string(first+second).data(), std::to_string(first + second).size()); // вывести текст на экран
+			SendMessage(GetDlgItem(hWndDialog, IDC_EDIT1), WM_GETTEXT, 200, (LPARAM)buf);
+			str = buf;
+			first = StringToVectorInt(str);
+			SendMessage(GetDlgItem(hWndDialog, IDC_EDIT2), WM_GETTEXT, 200, (LPARAM)buf);
+			str = buf;
+			second = StringToVectorInt(str);
+			strSum = sum(first, second);
+			TextOut(hdcm, x, y, strSum.data(), strSum.size()); // вывести текст на экран
 			y += 18;
 			InvalidateRect(hWndPanel, NULL, false);
 			break;

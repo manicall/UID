@@ -10,7 +10,7 @@ void gotoxy(int x, int y)
 }
 /*получить координаты консоли*/
 void GetConsoleCursorPosition(int& x, int& y)
-{   
+{
     COORD c;
     CONSOLE_SCREEN_BUFFER_INFO cbsi;
     if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cbsi))
@@ -97,7 +97,7 @@ void ChangeColor(const char* attrubute)
     } while (font == background);
     if (!strcmp(attrubute, "default"))
     {
-        font = 0, background = 7;
+        font = 7, background = 0;
     }
 
     if (background > 9) color += char(background + 55);
@@ -106,7 +106,7 @@ void ChangeColor(const char* attrubute)
     else color += std::to_string(font);
 
     system(color.data());
-    if (IsMenuDisplayed) MessageBeep(0);
+    if (IsMenuDisplayed) Beep(1000, 300);
 }
 /*закрасить меню*/
 void HideMenu(std::string textUnderMenu[]) {
@@ -123,8 +123,9 @@ void HideMenu(std::string textUnderMenu[]) {
     }
     SwitchIsMenuDisplayed(false);
 }
+/*скрыть меню*/
 void HideMenu(std::string textUnderMenu[], int x, int y) {
-    
+
     for (int i = 0; i < 3; i++) {
         gotoxy(0, i);
         std::cout << textUnderMenu[i];
@@ -144,20 +145,20 @@ void ChoiseMenu(int x, int y, std::string textUnderMenu[]) {
     if (y) {
         if (x >= 1 && x <= 13) {
             ChangeColor("font");
-            SwitchEchoMode(false); 
+            SwitchEchoMode(false);
         }
         else if (x >= 15 && x <= 19) {
             ChangeColor("background");
             SwitchEchoMode(false);
-     
+
         }
-        else if (x >= 21 && x <= 25) 
+        else if (x >= 21 && x <= 25)
         {
             SwitchEchoMode(true);
-            MessageBeep(0);
+            Beep(1000, 300);
         }
         else if (x >= 27 && x <= 33) {
-            MessageBeep(0);
+            Beep(1000, 300);
             exit(0);
         }
     }

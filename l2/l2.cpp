@@ -11,8 +11,7 @@ void check_colors() {
 		}
 
 }
-/*функция для отладки*/
-
+/*скрыть курсор*/
 void HideCursor() {
 	CONSOLE_CURSOR_INFO CCI;
 	CCI.bVisible = false;
@@ -20,23 +19,12 @@ void HideCursor() {
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &CCI);
 }
 
-
 int main() {
 	setlocale(LC_ALL, "ru");
 #ifdef DEBUG
 	check_colors();
 #endif // DEBUG
 	HideCursor();
-#ifdef DEBUG
-
-	Summer sum;
-	std::vector<std::string> str = sum.FindAllValues("борьба");
-	for (auto i : str)
-		std::cout << i << std::endl;
-#endif // DEBUG
-
-	
-
 	Menu menu;
 	menu.DisplayMenu(0);	
 	while (true)

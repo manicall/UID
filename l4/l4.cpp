@@ -1,6 +1,5 @@
 ﻿// l4.cpp : Определяет точку входа для приложения.
 //
-#pragma warning (disable : 4996)
 #undef UNICODE
 #include "framework.h"
 #include <windowsx.h>
@@ -20,7 +19,7 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса глав�
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK    dialog(HWND, UINT, WPARAM, LPARAM);
 HWND hWnd;
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -59,6 +58,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     return (int) msg.wParam;
 }
+
+
 
 //
 //  ФУНКЦИЯ: MyRegisterClass()
@@ -114,16 +115,20 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-//
-//  ФУНКЦИЯ: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  ЦЕЛЬ: Обрабатывает сообщения в главном окне.
-//
-//  WM_COMMAND  - обработать меню приложения
-//  WM_PAINT    - Отрисовка главного окна
-//  WM_DESTROY  - отправить сообщение о выходе и вернуться
-//
-//
+void PrintStack(std::stack<char> st) {
+    HDC hdc = GetDC(hWnd);
+    int x = 0, y = 0;
+    InvalidateRect(hWnd, 0, 0);
+    std::string buf;
+    while (!st.empty()) {
+        buf = st.top();
+        TextOut(hdc, x, y, buf.data(), buf.size());
+        st.pop();
+        y += 18;
+    }
+    InvalidateRect(hWnd, 0, 0);
+}
+std::stack<char>st;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
@@ -135,7 +140,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wmId)
             {
             case IDD_L4_DIALOG:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_DIALOG), hWnd, dialog);
+                break;
+            case ID_LIST_INSERT:
+                st.push(std::to_string(rand()%10)[0]);
+                break;
+            case ID_LIST_DELETE:
+                st.pop();
+                break;
+            case ID_LIST_SHOW:
+                PrintStack(st);
                 break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
@@ -149,7 +163,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Добавьте сюда любой код прорисовки, использующий HDC...
+            
             EndPaint(hWnd, &ps);
         }
         break;
@@ -162,40 +176,52 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-std::stack<char> st;
-std::string buf;
-HWND hList;
-int listIndex;
-INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+HWND hList, hEdit;
+
+void PrintStackInListBox(HWND& hList, std::stack<char> st) {
+    while (ListBox_GetCount(hList) > 0) {
+        ListBox_DeleteString(hList, 0);
+    }
+    std::string buf;
+    while (!st.empty()) {
+        buf = st.top();
+        ListBox_AddString(hList, buf.data());
+        st.pop();
+    }
+}
+
+INT_PTR CALLBACK dialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    UNREFERENCED_PARAMETER(lParam);
+    std::string buf;
     switch (message)
     {
-
     case WM_INITDIALOG:
-        //for (int i = 0; i < st.size(); i++)
-        hList = GetDlgItem(hDlg, IDC_EDIT1);
-
-
+        hEdit = GetDlgItem(hDlg, IDC_EDIT1);
+        hList = GetDlgItem(hDlg, IDC_LIST1);
+        PrintStackInListBox(hList, st);
         return (INT_PTR)TRUE;
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
         case IDC_LIST1:
-            if (HIWORD(wParam) == LBN_DBLCLK)
-            {
-                if (!(listIndex = ListBox_GetCurSel(hList))) {
+            if (HIWORD(wParam) == LBN_DBLCLK) {
+                if (!ListBox_GetCurSel(hList)) {
                     st.pop();
+                    ListBox_DeleteString(hList, 0);
                 }
             }
             break;
         case IDOK:
-            SendMessage(hList, WM_GETTEXT, 2, (LPARAM)buf.c_str());
+            SendMessage(hEdit, WM_GETTEXT, 2, (LPARAM)buf.c_str());
             st.push(buf[0]);
-            ListBox_AddString(hList, buf.data());
-            buf.clear();
+            PrintStackInListBox(hList, st);
             break;
         case IDCLOSE:
+            EndDialog(hDlg, LOWORD(wParam));
+            return (INT_PTR)TRUE;
+        }
+        if (LOWORD(wParam) == IDCANCEL)
+        {
             EndDialog(hDlg, LOWORD(wParam));
             return (INT_PTR)TRUE;
         }

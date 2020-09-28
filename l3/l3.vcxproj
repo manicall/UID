@@ -146,6 +146,8 @@
     <ClInclude Include="Summer.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Winter.h" />
+    <ClInclude Include="графика.h" />
+    <ClInclude Include="элементы управления.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="l3.cpp" />
