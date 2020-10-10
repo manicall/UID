@@ -123,7 +123,7 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 	case WM_PAINT:
 		hdc = BeginPaint(hWndPanel, &ps); // получить контекст устройства
 		BitBlt(hdc,        // контекст устройства приемника изображения;
-			0, 0,         // x, y-координата левого верхнего угла приемни-ка;
+			0, 0,         // x, y-координата левого верхнего угла приемника;
 			lx, ly,      // ширина и высота изображения;
 			hdcm,       // контекст устройства источника изображения;
 			0, 0,	   // x, y-координата левого верхнего угла источника;
@@ -141,7 +141,7 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 			str = buf;
 			second = StringToVectorInt(str);
 			strSum = sum(first, second);
-			TextOut(hdcm, x, y, strSum.data(), strSum.size()); // вывести текст на экран
+			TextOut(hdcm, x, y, strSum.data(), strSum.size()); // вывести текст
 			y += 18;
 			InvalidateRect(hWndPanel, NULL, false);
 			break;

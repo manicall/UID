@@ -241,7 +241,7 @@ BOOL CALLBACK   PviewDlgProc2(HWND    hDlg,
     {
         static PAINTSTRUCT ps; // структура для перерисовки окна
         HDC hdc = BeginPaint(GetDlgItem(hDlg, IDC_STATIC1), &ps); // получить контекст устройства
-        DrawImage(hdc, ofn.lpstrFile,7, 7, lx+60, ly+75);
+        DrawImage(hdc, ofn.lpstrFile, 7, 7, lx+60, ly+75);
         EndPaint(GetDlgItem(hDlg, IDC_STATIC1), &ps);
         break;
     }
