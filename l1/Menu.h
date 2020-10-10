@@ -3,7 +3,7 @@
 bool IsMenuDisplayed = false; // отображается ли меню
 bool echoMode = true;
 /*переместить курсор по координатам*/
-void gotoxy(int x, int y)
+void gotoxy(const int &x,const int& y)
 {
     COORD c = { x, y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
@@ -79,7 +79,6 @@ void SwitchIsMenuDisplayed(bool condition) {
 font - изменить цвет шрифта
 background - изменить цвет фона
 default - цвет шрифта и фона по умолчанию
-black - черный цвет шрифта и фона
 */
 void ChangeColor(const char* attrubute)
 {

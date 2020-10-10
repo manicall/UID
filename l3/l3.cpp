@@ -46,8 +46,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     // Цикл основного сообщения:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);   
+       TranslateMessage(&msg);
+       DispatchMessage(&msg);   
     }
     GdiplusShutdown(token);
     return (int) msg.wParam;
@@ -228,11 +228,6 @@ BOOL CALLBACK   PviewDlgProc2(HWND    hDlg,
     LPARAM  lParam)
 {
     static int lx = 150, ly = 170;
-    static RECT rect; // координаты прямоугольника
-    static HDC hdc, hdcm; // контекст устройтва
-    static PAINTSTRUCT ps; // структура для перерисовки окна
-    static HBITMAP hbm; // дескриптор изображения
-    static HBRUSH hbr; // дескриптор кисти
     switch (wMsg)
     {
         // сообщение об инициализации диалоговой формы

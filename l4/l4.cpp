@@ -212,9 +212,16 @@ INT_PTR CALLBACK dialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
             }
             break;
         case IDOK:
-            SendMessage(hEdit, WM_GETTEXT, 2, (LPARAM)buf.c_str());
-            st.push(buf[0]);
-            PrintStackInListBox(hList, st);
+            SendMessage(hEdit, WM_GETTEXT, 10, (LPARAM)buf.data());
+            try {
+                int length = strlen(buf.data());
+                if (length > 1) throw std::exception("Поле ввода не принимает строку");
+                if (!length) throw std::exception("Поле ввода не может быть пустым!");
+                SendMessage(hEdit, WM_SETTEXT, 1, (LPARAM)"");
+                st.push(buf[0]);
+                PrintStackInListBox(hList, st);
+            }
+            catch (std::exception ex) { MessageBox(0, ex.what(), 0, MB_ICONERROR); }
             break;
         case IDCLOSE:
             EndDialog(hDlg, LOWORD(wParam));

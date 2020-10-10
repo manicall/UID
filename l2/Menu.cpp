@@ -1,5 +1,5 @@
 #include "Menu.h"
-//#define DEBUG
+#define DEBUG
 /*заполнитель*/
 std::string Padding(std::string str, const size_t num, const char paddingChar = ' ')
 {
@@ -198,20 +198,22 @@ void Menu::gotoxy(COORD c)
 
 void Menu::HideMenu()
 {
-	--levelOfMenu;
-	pointOfMenu = 0;
-	switch (levelOfMenu + 1)
-	{
-	case SECOND:
-		system("cls");
-		break;
-	case THIRD:
-		system("cls");
-		DisplayMenu(levelOfMenu - 1);
-		DisplayMenu(levelOfMenu);
-		break;
-	default:
-		break;
+	if (levelOfMenu > 0) {
+		--levelOfMenu;
+		pointOfMenu = 0;
+		switch (levelOfMenu + 1)
+		{
+		case SECOND:
+			system("cls");
+			break;
+		case THIRD:
+			system("cls");
+			DisplayMenu(levelOfMenu - 1);
+			DisplayMenu(levelOfMenu);
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -248,7 +250,7 @@ void Menu::ChangeColor(std::string color) {
 		if (color == "default")
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((0 << 4) | 7));
 		if (color == "reverse_default")
-			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((15 << 4) | 0));
+			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((7 << 4) | 0));
 #else
 		if (color == "default")
 			SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)((7 << 4) | 0));

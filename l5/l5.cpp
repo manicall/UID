@@ -108,7 +108,6 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);
 		// установить в контексте устройства hdcm кисть hbr
 		SelectObject(hdcm, hbr);
-
 		// закрашивает прямоугольную область с координатами(x, y), шириной width
 		// и высотой height, используя текущую кисть и растровую операцию dwRaster
 		// PATCOPY - область заполняется текущей кистью;
