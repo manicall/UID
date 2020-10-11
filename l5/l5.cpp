@@ -112,7 +112,7 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 		// и высотой height, используя текущую кисть и растровую операцию dwRaster
 		// PATCOPY - область заполняется текущей кистью;
 		PatBlt(hdcm, 0, 0, lx, ly, PATCOPY);
-		// объявляет недействительным прямоугольник *lpRect в окне hWnd
+		// объявляет недействительным прямоугольник  в окне hWnd
 		InvalidateRect(hWndPanel,
 			NULL, // перерисовать все окно
 			false); // если true перерисовать фон окна
@@ -123,7 +123,7 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 	case WM_PAINT:
 		hdc = BeginPaint(hWndPanel, &ps); // получить контекст устройства
 		BitBlt(hdc,        // контекст устройства приемника изображения;
-			0, 0,         // x, y-координата левого верхнего угла приемника;
+			0, 0,         // x, y-координата левого верхнего угла приемни-ка;
 			lx, ly,      // ширина и высота изображения;
 			hdcm,       // контекст устройства источника изображения;
 			0, 0,	   // x, y-координата левого верхнего угла источника;
@@ -141,7 +141,7 @@ BOOL CALLBACK   PviewDlgProc(HWND    hWnd,
 			str = buf;
 			second = StringToVectorInt(str);
 			strSum = sum(first, second);
-			TextOut(hdcm, x, y, strSum.data(), strSum.size()); // вывести текст
+			TextOut(hdcm, x, y, strSum.data(), strSum.size()); // вывести текст на экран
 			y += 18;
 			InvalidateRect(hWndPanel, NULL, false);
 			break;
